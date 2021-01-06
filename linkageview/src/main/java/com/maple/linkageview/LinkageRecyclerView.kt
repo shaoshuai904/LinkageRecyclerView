@@ -16,9 +16,9 @@ import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
-import com.maple.linkageview.adapter.BaseQuickAdapter
-import com.maple.linkageview.adapter.MsChildAdapter
-import com.maple.linkageview.adapter.MsGroupAdapter
+import com.maple.linkageview.adapter.BaseQuickLinkageAdapter
+import com.maple.linkageview.adapter.DefaultChildAdapter
+import com.maple.linkageview.adapter.DefaultGroupAdapter
 import com.maple.linkageview.bean.BaseItem
 import com.maple.linkageview.utils.RecyclerViewScrollHelper
 import java.util.*
@@ -37,16 +37,14 @@ class LinkageRecyclerView : RelativeLayout {
     private var mTvHeader: TextView? = null
 
     // group
-    private val primaryAdapter: MsGroupAdapter by lazy { MsGroupAdapter(context) }
+    private lateinit var groupAdapter: BaseQuickLinkageAdapter<BaseItem>
     private val mGroupPositions: MutableList<Int> = ArrayList() // group 的索引值
     private var mLastGroupName: String? = null
 
     // child
-    private val childAdapter: MsChildAdapter by lazy { MsChildAdapter(context) }
-    private lateinit var mChildLayoutManager: LinearLayoutManager
+    private lateinit var childAdapter: BaseQuickLinkageAdapter<BaseItem>
     private var mInitItems: List<BaseItem> = arrayListOf()
 
-    private var mConfig: LinkageConfig = LinkageConfig(context)
     private var mTitleHeight = 0
     private var mFirstVisiblePosition = 0
     private var mScrollSmoothly = true
@@ -66,15 +64,18 @@ class LinkageRecyclerView : RelativeLayout {
         mHeaderContainer = findViewById(R.id.header_container)
     }
 
-
     fun init(linkageItems: List<BaseItem>?) {
-        init(linkageItems, LinkageConfig(context))
+        init(linkageItems, DefaultGroupAdapter(context), DefaultChildAdapter(context))
     }
 
-    fun init(linkageItems: List<BaseItem>?, config: LinkageConfig = LinkageConfig(context)) {
-        mConfig = config
-        initRecyclerView()
-        mInitItems = linkageItems ?: arrayListOf()
+    fun init(
+        linkageItems: List<BaseItem>?,
+        groupAdapter: BaseQuickLinkageAdapter<BaseItem>,
+        childAdapter: BaseQuickLinkageAdapter<BaseItem>
+    ) {
+        this.mInitItems = linkageItems ?: arrayListOf()
+        this.groupAdapter = groupAdapter
+        this.childAdapter = childAdapter
 
         val groupNames: MutableList<BaseItem> = ArrayList()
         mInitItems.forEachIndexed { index, item ->
@@ -84,51 +85,37 @@ class LinkageRecyclerView : RelativeLayout {
             }
         }
 
-        primaryAdapter.refreshData(groupNames)
+        initRecyclerView()
+        this.groupAdapter.refreshData(groupNames)
         childAdapter.refreshData(mInitItems)
         initLinkageChild()
     }
 
-    var groupItemClickListener: BaseQuickAdapter.OnItemClickListener<BaseItem>? = null
-    var childItemClickListener: BaseQuickAdapter.OnItemClickListener<BaseItem>? = null
+    var groupItemClickListener: BaseQuickLinkageAdapter.OnItemClickListener<BaseItem>? = null
+    var childItemClickListener: BaseQuickLinkageAdapter.OnItemClickListener<BaseItem>? = null
 
     private fun initRecyclerView() {
         mRvGroup.layoutManager = LinearLayoutManager(context)
-        mRvGroup.adapter = primaryAdapter.apply {
+        mRvGroup.adapter = groupAdapter.apply {
             setOnItemClickListener { item: BaseItem?, position: Int ->
                 if (isScrollSmoothly) {
                     // 点击主条目时，次条目平滑滚动
                     RecyclerViewScrollHelper.smoothScrollToPosition(mRvChild, LinearSmoothScroller.SNAP_TO_START, mGroupPositions[position])
                 } else {
-                    mChildLayoutManager.scrollToPositionWithOffset(mGroupPositions[position], 0)
+                    val manager = mRvChild.layoutManager as LinearLayoutManager
+                    manager.scrollToPositionWithOffset(mGroupPositions[position], 0)
                 }
-                primaryAdapter.updateSelectItem(position)
+                updateSelectItem(position)
                 mGroupClicked = true
                 groupItemClickListener?.onItemClick(item, position)
             }
         }
-        setLevel2LayoutManager()
+        mRvChild.layoutManager = LinearLayoutManager(context)
         mRvChild.adapter = childAdapter.apply {
             setOnItemClickListener { item: BaseItem?, position: Int ->
                 childItemClickListener?.onItemClick(item, position)
             }
         }
-    }
-
-    private fun setLevel2LayoutManager() {
-        if (childAdapter.isGridMode()) {
-            mChildLayoutManager = GridLayoutManager(context, mConfig.spanCount)
-            (mChildLayoutManager as GridLayoutManager).spanSizeLookup = object : SpanSizeLookup() {
-                override fun getSpanSize(position: Int): Int {
-                    return if (childAdapter.getItem(position).isGroup) {
-                        mConfig.spanCount
-                    } else 1
-                }
-            }
-        } else {
-            mChildLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        }
-        mRvChild.layoutManager = mChildLayoutManager
     }
 
     private fun initLinkageChild() {
@@ -149,6 +136,7 @@ class LinkageRecyclerView : RelativeLayout {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
+                val mChildLayoutManager = mRvChild.layoutManager as LinearLayoutManager
                 val firstPosition = mChildLayoutManager.findFirstVisibleItemPosition()
                 val firstCompletePosition = mChildLayoutManager.findFirstCompletelyVisibleItemPosition()
                 val items = mInitItems
@@ -185,15 +173,15 @@ class LinkageRecyclerView : RelativeLayout {
                 // To avoid to this extreme situation, my idea is to add a footer on the bottom,
                 // to help wholly execute this logic.
                 if (groupNameChanged) {
-                    val groupNames = primaryAdapter.data
+                    val groupNames = groupAdapter.data
                     for (i in groupNames.indices) {
                         if (groupNames[i].itemName == mLastGroupName) {
                             if (mGroupClicked) {
-                                if (primaryAdapter.getSelectedPosition() == i) {
+                                if (groupAdapter.selectedPosition == i) {
                                     mGroupClicked = false
                                 }
                             } else {
-                                primaryAdapter.updateSelectItem(i)
+                                groupAdapter.updateSelectItem(i)
                                 RecyclerViewScrollHelper.smoothScrollToPosition(mRvGroup, LinearSmoothScroller.SNAP_TO_END, i)
                             }
                         }
@@ -204,8 +192,17 @@ class LinkageRecyclerView : RelativeLayout {
     }
 
     fun setSpanCount(span: Int) {
-        childAdapter.setSpanCount(span)
-        setLevel2LayoutManager()
+        mRvChild.layoutManager = if (span > 1) {
+            GridLayoutManager(context, span).apply {
+                spanSizeLookup = object : SpanSizeLookup() {
+                    override fun getSpanSize(position: Int): Int {
+                        return if (childAdapter.getItem(position).isGroup) span else 1
+                    }
+                }
+            }
+        } else {
+            LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        }
         mRvChild.requestLayout()
     }
 
@@ -237,5 +234,7 @@ class LinkageRecyclerView : RelativeLayout {
     }
 
 
-
 }
+
+
+

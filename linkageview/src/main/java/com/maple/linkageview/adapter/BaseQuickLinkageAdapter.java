@@ -8,12 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
- *
- * @author shaoshuai
- * @time 2018-08-06
+ * @author : shaoshuai
+ * @date ：2021/1/4
  */
-public abstract class BaseQuickAdapter<T, K extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<K> {
+public abstract class BaseQuickLinkageAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<T> mDataList = new ArrayList<T>();
 
     public void refreshData(List<T> newData) {
@@ -65,6 +63,21 @@ public abstract class BaseQuickAdapter<T, K extends RecyclerView.ViewHolder> ext
     @Override
     public int getItemCount() {
         return mDataList.size();
+    }
+
+    // ------------------------ update selected ---------------------------
+
+    protected int mSelectedPosition = 0;
+
+    public int getSelectedPosition() {
+        return mSelectedPosition;
+    }
+
+    public void updateSelectItem(int index) {
+        // 合规化index值，大于0 且 小于 size
+        int number = Math.min(Math.max(index, 0), getData().size() - 1);
+        mSelectedPosition = number;
+        notifyDataSetChanged();
     }
 
     // ---------------------------- listener -------------------------------

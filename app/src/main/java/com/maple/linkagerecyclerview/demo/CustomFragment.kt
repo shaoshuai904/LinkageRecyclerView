@@ -9,16 +9,22 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.maple.linkagerecyclerview.R
 import com.maple.linkagerecyclerview.data.TestDataUtils
-import com.maple.linkagerecyclerview.databinding.FragmentSecondBinding
-import com.maple.linkageview.adapter.BaseQuickAdapter
+import com.maple.linkagerecyclerview.databinding.FragmentCustomBinding
+import com.maple.linkageview.adapter.BaseQuickLinkageAdapter
+import com.maple.linkageview.adapter.DefaultGroupAdapter
 import com.maple.linkageview.bean.BaseItem
 
-
-class SecondFragment : Fragment() {
-    private lateinit var binding: FragmentSecondBinding
+/**
+ * 自定义样式
+ *
+ * @author : shaoshuai
+ * @date ：2021/1/6
+ */
+class CustomFragment : Fragment() {
+    private lateinit var binding: FragmentCustomBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_second, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_custom, container, false)
         binding.lifecycleOwner = this
         return binding.root
     }
@@ -38,14 +44,14 @@ class SecondFragment : Fragment() {
     }
 
     private fun initLinkageData() {
-        val data = TestDataUtils.getTestData()
+        val data = TestDataUtils.getTestData2()
         with(binding.linkage) {
-            init(data)
+            init(data, DefaultGroupAdapter(context), CustomChildAdapter(context))
             isScrollSmoothly = false
-            groupItemClickListener = BaseQuickAdapter.OnItemClickListener<BaseItem> { item, position ->
+            groupItemClickListener = BaseQuickLinkageAdapter.OnItemClickListener<BaseItem> { item, position ->
                 Snackbar.make(view!!, item.itemName!!, Snackbar.LENGTH_SHORT).show()
             }
-            childItemClickListener = BaseQuickAdapter.OnItemClickListener<BaseItem> { item, position ->
+            childItemClickListener = BaseQuickLinkageAdapter.OnItemClickListener<BaseItem> { item, position ->
                 Snackbar.make(view!!, item.itemName!!, Snackbar.LENGTH_SHORT).show()
             }
         }

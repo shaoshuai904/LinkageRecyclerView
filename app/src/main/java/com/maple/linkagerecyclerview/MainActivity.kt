@@ -7,8 +7,9 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.maple.linkagerecyclerview.databinding.ActivityMainBinding
-import com.maple.linkagerecyclerview.demo.FirstFragment
-import com.maple.linkagerecyclerview.demo.SecondFragment
+import com.maple.linkagerecyclerview.demo.QuickFragment
+import com.maple.linkagerecyclerview.demo.CustomFragment
+import com.maple.linkagerecyclerview.demo.SwitchFragment
 
 /**
  * 示例
@@ -28,12 +29,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun initView() {
         val titles = arrayListOf<String>(
-            "First",
-            "Second"
+            "Quick",
+            "Switch",
+            "Custom"
         )
         val fargments = arrayListOf<Fragment>(
-            FirstFragment(),
-            SecondFragment()
+            QuickFragment(),
+            SwitchFragment(),
+            CustomFragment()
         )
         binding.viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun getItemCount(): Int = fargments.size
