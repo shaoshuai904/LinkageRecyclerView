@@ -63,9 +63,9 @@ object TestDataUtils {
             "https://upload-images.jianshu.io/upload_images/57036-4a6889ba228feb46.png"
         )
         val des = arrayOf(
-            "好吃的食物，增肥神器，有求必应n月售10008 好评率100%",
-            "好吃的食物，增肥神器，有求必应n月售10008 好评率100%",
-            "好吃的食物，增肥神器，有求必应n月售10008 好评率100%"
+            "好吃的食物，有求必应\n月售5608 好评率98%",
+            "好吃的食物，有求必应\n月售1008 好评率100%",
+            "好吃的食物，有求必应\n月售10086 好评率82%"
         )
         val data = arrayListOf<CustomItemInfo>(
             CustomItemInfo("优惠"),

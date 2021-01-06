@@ -37,8 +37,8 @@ class DefaultGroupAdapter(
             val selected = mSelectedPosition == position
             binding.tvGroup.let {
                 it.text = item.itemName
-                it.setBackgroundColor(ContextCompat.getColor(mContext, if (selected) R.color.colorPurple else R.color.colorWhite))
-                it.setTextColor(ContextCompat.getColor(mContext, if (selected) R.color.colorWhite else R.color.colorGray))
+                it.setBackgroundColor(ContextCompat.getColor(mContext, if (selected) R.color.group_bg_sel else R.color.group_bg_def))
+                it.setTextColor(ContextCompat.getColor(mContext, if (selected) R.color.group_text_sel else R.color.group_text_def))
                 it.ellipsize = if (selected) TextUtils.TruncateAt.MARQUEE else TextUtils.TruncateAt.END
                 it.isFocusable = selected
                 it.isFocusableInTouchMode = selected

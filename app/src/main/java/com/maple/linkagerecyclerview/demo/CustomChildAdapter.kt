@@ -44,20 +44,12 @@ open class CustomChildAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             type_header -> HeaderHolder(
-                DataBindingUtil.inflate(
-                    LayoutInflater.from(mContext),
-                    com.maple.linkageview.R.layout.ms_item_child_header,
-                    parent,
-                    false
-                )
+                DataBindingUtil.inflate(LayoutInflater.from(mContext),
+                    com.maple.linkageview.R.layout.ms_item_child_header, parent, false)
             )
             type_footer -> FooterHolder(
-                DataBindingUtil.inflate(
-                    LayoutInflater.from(mContext),
-                    com.maple.linkageview.R.layout.ms_item_child_footer,
-                    parent,
-                    false
-                )
+                DataBindingUtil.inflate(LayoutInflater.from(mContext),
+                    com.maple.linkageview.R.layout.ms_item_child_footer, parent, false)
             )
             // type_item -> ItemHolder(DataBindingUtil.inflate(LayoutInflater.from(mContext), R.layout.ms_item_child, parent, false))
             else -> ItemHolder(DataBindingUtil.inflate(LayoutInflater.from(mContext), R.layout.item_child_custom, parent, false))

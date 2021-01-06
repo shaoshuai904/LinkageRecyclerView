@@ -13,6 +13,7 @@
             android:id="@+id/rv_group"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:background="@color/group_bg_def"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toStartOf="@+id/gl_line"
             app:layout_constraintStart_toStartOf="parent"
