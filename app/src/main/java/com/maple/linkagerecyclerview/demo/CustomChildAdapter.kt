@@ -10,7 +10,7 @@ import com.maple.linkagerecyclerview.R
 import com.maple.linkagerecyclerview.data.CustomItemInfo
 import com.maple.linkagerecyclerview.databinding.ItemChildCustomBinding
 import com.maple.linkageview.adapter.BaseQuickLinkageAdapter
-import com.maple.linkageview.bean.BaseItem
+import com.maple.linkageview.bean.BaseLinkageItem
 import com.maple.linkageview.databinding.MsItemChildFooterBinding
 import com.maple.linkageview.databinding.MsItemChildHeaderBinding
 
@@ -22,7 +22,7 @@ import com.maple.linkageview.databinding.MsItemChildHeaderBinding
  */
 open class CustomChildAdapter(
     private val mContext: Context
-) : BaseQuickLinkageAdapter<BaseItem>() {
+) : BaseQuickLinkageAdapter<BaseLinkageItem>() {
 
     companion object {
         const val type_item = 0
@@ -31,7 +31,7 @@ open class CustomChildAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        val item: BaseItem = getItem(position)
+        val item: BaseLinkageItem = getItem(position)
         return if (item.isGroup) {
             type_header
         } else if (item.itemName.isNullOrEmpty() && !item.parentName.isNullOrEmpty()) {
@@ -44,12 +44,16 @@ open class CustomChildAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             type_header -> HeaderHolder(
-                DataBindingUtil.inflate(LayoutInflater.from(mContext),
-                    com.maple.linkageview.R.layout.ms_item_child_header, parent, false)
+                DataBindingUtil.inflate(
+                    LayoutInflater.from(mContext),
+                    com.maple.linkageview.R.layout.ms_item_child_header, parent, false
+                )
             )
             type_footer -> FooterHolder(
-                DataBindingUtil.inflate(LayoutInflater.from(mContext),
-                    com.maple.linkageview.R.layout.ms_item_child_footer, parent, false)
+                DataBindingUtil.inflate(
+                    LayoutInflater.from(mContext),
+                    com.maple.linkageview.R.layout.ms_item_child_footer, parent, false
+                )
             )
             // type_item -> ItemHolder(DataBindingUtil.inflate(LayoutInflater.from(mContext), R.layout.ms_item_child, parent, false))
             else -> ItemHolder(DataBindingUtil.inflate(LayoutInflater.from(mContext), R.layout.item_child_custom, parent, false))
@@ -78,7 +82,7 @@ open class CustomChildAdapter(
 
     // 头
     inner class HeaderHolder(val binding: MsItemChildHeaderBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: BaseItem) {
+        fun bind(item: BaseLinkageItem) {
             // bindViewClickListener(this)
             binding.tvName.text = item.getShowGroupName()
         }
@@ -86,7 +90,7 @@ open class CustomChildAdapter(
 
     // 尾
     inner class FooterHolder(val binding: MsItemChildFooterBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: BaseItem) {
+        fun bind(item: BaseLinkageItem) {
             // bindViewClickListener(this)
             binding.tvName.text = item.itemName
         }

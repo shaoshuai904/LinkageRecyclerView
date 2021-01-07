@@ -7,8 +7,7 @@ import java.io.Serializable
  * @author : shaoshuai
  * @date ：2021/1/4
  */
-
-open class BaseItem(
+open class BaseLinkageItem(
     var itemName: String?,
     var parentName: String?,
     var isGroup: Boolean = false// 是否是头

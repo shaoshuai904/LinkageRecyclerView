@@ -3,14 +3,10 @@ package com.maple.linkageview
 import android.content.Context
 import android.text.TextUtils
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.LayoutInflater
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.Guideline
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.maple.linkageview.adapter.BaseQuickLinkageAdapter
 import com.maple.linkageview.adapter.DefaultChildAdapter
 import com.maple.linkageview.adapter.DefaultGroupAdapter
-import com.maple.linkageview.bean.BaseItem
+import com.maple.linkageview.bean.BaseLinkageItem
 import com.maple.linkageview.utils.RecyclerViewScrollHelper
 import java.util.*
 
@@ -30,24 +26,20 @@ import java.util.*
  * @date ：2021/1/4
  */
 class LinkageRecyclerView : RelativeLayout {
-    private lateinit var mRoot: ConstraintLayout
     private lateinit var mRvGroup: RecyclerView
     private lateinit var mRvChild: RecyclerView
     private lateinit var mHeaderContainer: FrameLayout
-    private var mTvHeader: TextView? = null
 
-    // group
-    private lateinit var groupAdapter: BaseQuickLinkageAdapter<BaseItem>
+    private lateinit var groupAdapter: BaseQuickLinkageAdapter<BaseLinkageItem>
+    private lateinit var childAdapter: BaseQuickLinkageAdapter<BaseLinkageItem>
     private val mGroupPositions: MutableList<Int> = ArrayList() // group 的索引值
+    private var mInitItems: List<BaseLinkageItem> = arrayListOf()
     private var mLastGroupName: String? = null
 
-    // child
-    private lateinit var childAdapter: BaseQuickLinkageAdapter<BaseItem>
-    private var mInitItems: List<BaseItem> = arrayListOf()
-
+    private var mTvHeader: TextView? = null
     private var mTitleHeight = 0
+
     private var mFirstVisiblePosition = 0
-    private var mScrollSmoothly = true
     private var mGroupClicked = false // 组item点击
 
     constructor(context: Context) : this(context, null)
@@ -58,26 +50,25 @@ class LinkageRecyclerView : RelativeLayout {
 
     private fun initView(context: Context) {
         LayoutInflater.from(context).inflate(R.layout.ms_layout_linkage_view, this, true)
-        mRoot = findViewById(R.id.linkage_layout)
         mRvGroup = findViewById(R.id.rv_group)
         mRvChild = findViewById(R.id.rv_child)
         mHeaderContainer = findViewById(R.id.header_container)
     }
 
-    fun init(linkageItems: List<BaseItem>?) {
+    fun init(linkageItems: List<BaseLinkageItem>?) {
         init(linkageItems, DefaultGroupAdapter(context), DefaultChildAdapter(context))
     }
 
     fun init(
-        linkageItems: List<BaseItem>?,
-        groupAdapter: BaseQuickLinkageAdapter<BaseItem>,
-        childAdapter: BaseQuickLinkageAdapter<BaseItem>
+        linkageItems: List<BaseLinkageItem>?,
+        groupAdapter: BaseQuickLinkageAdapter<BaseLinkageItem>,
+        childAdapter: BaseQuickLinkageAdapter<BaseLinkageItem>
     ) {
         this.mInitItems = linkageItems ?: arrayListOf()
         this.groupAdapter = groupAdapter
         this.childAdapter = childAdapter
 
-        val groupNames: MutableList<BaseItem> = ArrayList()
+        val groupNames: MutableList<BaseLinkageItem> = ArrayList()
         mInitItems.forEachIndexed { index, item ->
             if (item.isGroup) {
                 mGroupPositions.add(index)
@@ -91,13 +82,14 @@ class LinkageRecyclerView : RelativeLayout {
         initLinkageChild()
     }
 
-    var groupItemClickListener: BaseQuickLinkageAdapter.OnItemClickListener<BaseItem>? = null
-    var childItemClickListener: BaseQuickLinkageAdapter.OnItemClickListener<BaseItem>? = null
+    var isScrollSmoothly: Boolean = true
+    var groupItemClickListener: BaseQuickLinkageAdapter.OnItemClickListener<BaseLinkageItem>? = null
+    var childItemClickListener: BaseQuickLinkageAdapter.OnItemClickListener<BaseLinkageItem>? = null
 
     private fun initRecyclerView() {
         mRvGroup.layoutManager = LinearLayoutManager(context)
         mRvGroup.adapter = groupAdapter.apply {
-            setOnItemClickListener { item: BaseItem?, position: Int ->
+            setOnItemClickListener { item: BaseLinkageItem?, position: Int ->
                 if (isScrollSmoothly) {
                     // 点击主条目时，次条目平滑滚动
                     RecyclerViewScrollHelper.smoothScrollToPosition(mRvChild, LinearSmoothScroller.SNAP_TO_START, mGroupPositions[position])
@@ -112,7 +104,7 @@ class LinkageRecyclerView : RelativeLayout {
         }
         mRvChild.layoutManager = LinearLayoutManager(context)
         mRvChild.adapter = childAdapter.apply {
-            setOnItemClickListener { item: BaseItem?, position: Int ->
+            setOnItemClickListener { item: BaseLinkageItem?, position: Int ->
                 childItemClickListener?.onItemClick(item, position)
             }
         }
@@ -191,7 +183,29 @@ class LinkageRecyclerView : RelativeLayout {
         })
     }
 
-    fun setSpanCount(span: Int) {
+
+    // 设置固定宽度
+    fun setLayoutWidth(newWidth: Int) {
+        this.layoutParams = this.layoutParams.apply { width = newWidth }
+    }
+
+    // 设置固定高度
+    fun setLayoutHeight(newHeight: Int) {
+        this.layoutParams = this.layoutParams.apply { height = newHeight }
+    }
+
+    // 自定义Group区域宽度
+    fun setGroupWidth(newWidth: Int) {
+        mRvGroup.layoutParams = mRvGroup.layoutParams.apply { width = newWidth }
+    }
+
+    // 自定义Child区域宽度
+    fun setChildWidth(newWidth: Int) {
+        mRvChild.layoutParams = mRvChild.layoutParams.apply { width = newWidth }
+    }
+
+    // 自定义Child区域一行显示个数
+    fun setChildSpanSize(span: Int) {
         mRvChild.layoutManager = if (span > 1) {
             GridLayoutManager(context, span).apply {
                 spanSizeLookup = object : SpanSizeLookup() {
@@ -205,36 +219,4 @@ class LinkageRecyclerView : RelativeLayout {
         }
         mRvChild.requestLayout()
     }
-
-    var isScrollSmoothly: Boolean
-        get() = mScrollSmoothly
-        set(scrollSmoothly) {
-            mScrollSmoothly = scrollSmoothly
-        }
-
-    // 设置固定高度
-    fun setLayoutHeight(dp: Float) {
-        mRoot.layoutParams = mRoot.layoutParams.apply { height = dp2px(context, dp) }
-    }
-
-    // 自定义Group区域宽度
-    fun setGroupWidget(dp: Float) {
-        mRvGroup.layoutParams = mRvGroup.layoutParams.apply { width = dp2px(context, dp) }
-        mRvChild.layoutParams = mRvChild.layoutParams.apply { width = ViewGroup.LayoutParams.MATCH_PARENT }
-    }
-
-    // 自定义Group区域宽度 百分比
-    fun setGroupPercent(percent: Float) {
-        val guideline: Guideline = findViewById(R.id.gl_line)
-        guideline.setGuidelinePercent(percent)
-    }
-
-    private fun dp2px(context: Context, dpVal: Float): Int {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpVal, context.resources.displayMetrics).toInt()
-    }
-
-
 }
-
-
-

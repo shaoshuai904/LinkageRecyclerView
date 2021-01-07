@@ -8,7 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.maple.linkageview.R
-import com.maple.linkageview.bean.BaseItem
+import com.maple.linkageview.bean.BaseLinkageItem
 import com.maple.linkageview.databinding.MsItemGroupBinding
 
 /**
@@ -19,7 +19,7 @@ import com.maple.linkageview.databinding.MsItemGroupBinding
  */
 class DefaultGroupAdapter(
     private val mContext: Context
-) : BaseQuickLinkageAdapter<BaseItem>() {
+) : BaseQuickLinkageAdapter<BaseLinkageItem>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
         val binding: MsItemGroupBinding = DataBindingUtil.inflate(LayoutInflater.from(mContext), R.layout.ms_item_group, parent, false)
@@ -32,7 +32,7 @@ class DefaultGroupAdapter(
 
     inner class MyHolder(val binding: MsItemGroupBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(position: Int, item: BaseItem) {
+        fun bind(position: Int, item: BaseLinkageItem) {
             bindViewClickListener(this)
             val selected = mSelectedPosition == position
             binding.tvGroup.let {

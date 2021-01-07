@@ -6,10 +6,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
-
-/**
- * Create by KunMinX at 19/5/15
- */
 public class RecyclerViewScrollHelper {
 
     public static void smoothScrollToPosition(RecyclerView recyclerView, int snapMode, int position) {

@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.maple.linkageview.R
-import com.maple.linkageview.bean.BaseItem
+import com.maple.linkageview.bean.BaseLinkageItem
 import com.maple.linkageview.databinding.MsItemChildBinding
 import com.maple.linkageview.databinding.MsItemChildFooterBinding
 import com.maple.linkageview.databinding.MsItemChildHeaderBinding
@@ -19,7 +19,7 @@ import com.maple.linkageview.databinding.MsItemChildHeaderBinding
  */
 open class DefaultChildAdapter(
     private val mContext: Context
-) : BaseQuickLinkageAdapter<BaseItem>() {
+) : BaseQuickLinkageAdapter<BaseLinkageItem>() {
 
     companion object {
         const val type_item = 0
@@ -28,7 +28,7 @@ open class DefaultChildAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        val item: BaseItem = getItem(position)
+        val item: BaseLinkageItem = getItem(position)
         return if (item.isGroup) {
             type_header
         } else if (item.itemName.isNullOrEmpty() && !item.parentName.isNullOrEmpty()) {
@@ -59,7 +59,7 @@ open class DefaultChildAdapter(
 
     // 基础条目
     inner class ItemHolder(val binding: MsItemChildBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: BaseItem) {
+        fun bind(item: BaseLinkageItem) {
             bindViewClickListener(this)
             binding.tvTitle.text = item.itemName
             binding.tvDes.text = "详情说明"
@@ -68,7 +68,7 @@ open class DefaultChildAdapter(
 
     // 头
     inner class HeaderHolder(val binding: MsItemChildHeaderBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: BaseItem) {
+        fun bind(item: BaseLinkageItem) {
             // bindViewClickListener(this)
             binding.tvName.text = item.getShowGroupName()
         }
@@ -76,7 +76,7 @@ open class DefaultChildAdapter(
 
     // 尾
     inner class FooterHolder(val binding: MsItemChildFooterBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: BaseItem) {
+        fun bind(item: BaseLinkageItem) {
             // bindViewClickListener(this)
             binding.tvName.text = item.itemName
         }

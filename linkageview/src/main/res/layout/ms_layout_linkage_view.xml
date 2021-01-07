@@ -3,35 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/linkage_layout"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_group"
-            android:layout_width="0dp"
+            android:layout_width="120dp"
             android:layout_height="match_parent"
             android:background="@color/group_bg_def"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toStartOf="@+id/gl_line"
-            app:layout_constraintStart_toStartOf="parent"
             tools:listitem="@layout/ms_item_group" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/gl_line"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.25" />
 
         <FrameLayout
             android:id="@+id/fl_child"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/gl_line">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_child"
@@ -47,6 +35,6 @@
 
         </FrameLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </layout>

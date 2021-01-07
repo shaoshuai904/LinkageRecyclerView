@@ -12,7 +12,7 @@ import com.maple.linkagerecyclerview.data.TestDataUtils
 import com.maple.linkagerecyclerview.databinding.FragmentCustomBinding
 import com.maple.linkageview.adapter.BaseQuickLinkageAdapter
 import com.maple.linkageview.adapter.DefaultGroupAdapter
-import com.maple.linkageview.bean.BaseItem
+import com.maple.linkageview.bean.BaseLinkageItem
 
 /**
  * 自定义样式
@@ -38,7 +38,7 @@ class CustomFragment : Fragment() {
 
         binding.btSwitch.setOnClickListener {
             val span = if (isGridMode) 1 else 3
-            binding.linkage.setSpanCount(span)
+            binding.linkage.setChildSpanSize(span)
             isGridMode = !isGridMode
         }
     }
@@ -48,10 +48,10 @@ class CustomFragment : Fragment() {
         with(binding.linkage) {
             init(data, DefaultGroupAdapter(context), CustomChildAdapter(context))
             isScrollSmoothly = false
-            groupItemClickListener = BaseQuickLinkageAdapter.OnItemClickListener<BaseItem> { item, position ->
+            groupItemClickListener = BaseQuickLinkageAdapter.OnItemClickListener<BaseLinkageItem> { item, position ->
                 Snackbar.make(view!!, item.itemName!!, Snackbar.LENGTH_SHORT).show()
             }
-            childItemClickListener = BaseQuickLinkageAdapter.OnItemClickListener<BaseItem> { item, position ->
+            childItemClickListener = BaseQuickLinkageAdapter.OnItemClickListener<BaseLinkageItem> { item, position ->
                 Snackbar.make(view!!, item.itemName!!, Snackbar.LENGTH_SHORT).show()
             }
         }
