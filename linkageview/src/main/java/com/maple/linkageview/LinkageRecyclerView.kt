@@ -30,8 +30,8 @@ class LinkageRecyclerView : RelativeLayout {
     private lateinit var mRvChild: RecyclerView
     private lateinit var mHeaderContainer: FrameLayout
 
-    private lateinit var groupAdapter: BaseQuickLinkageAdapter<BaseLinkageItem>
-    private lateinit var childAdapter: BaseQuickLinkageAdapter<BaseLinkageItem>
+    private lateinit var groupAdapter: BaseQuickLinkageAdapter
+    private lateinit var childAdapter: BaseQuickLinkageAdapter
     private val mGroupPositions: MutableList<Int> = ArrayList() // group 的索引值
     private var mInitItems: List<BaseLinkageItem> = arrayListOf()
     private var mLastGroupName: String? = null
@@ -61,8 +61,8 @@ class LinkageRecyclerView : RelativeLayout {
 
     fun init(
         linkageItems: List<BaseLinkageItem>?,
-        groupAdapter: BaseQuickLinkageAdapter<BaseLinkageItem>,
-        childAdapter: BaseQuickLinkageAdapter<BaseLinkageItem>
+        groupAdapter: BaseQuickLinkageAdapter,
+        childAdapter: BaseQuickLinkageAdapter
     ) {
         this.mInitItems = linkageItems ?: arrayListOf()
         this.groupAdapter = groupAdapter
@@ -83,8 +83,8 @@ class LinkageRecyclerView : RelativeLayout {
     }
 
     var isScrollSmoothly: Boolean = true
-    var groupItemClickListener: BaseQuickLinkageAdapter.OnItemClickListener<BaseLinkageItem>? = null
-    var childItemClickListener: BaseQuickLinkageAdapter.OnItemClickListener<BaseLinkageItem>? = null
+    var groupItemClickListener: BaseQuickLinkageAdapter.OnItemClickListener? = null
+    var childItemClickListener: BaseQuickLinkageAdapter.OnItemClickListener? = null
 
     private fun initRecyclerView() {
         mRvGroup.layoutManager = LinearLayoutManager(context)

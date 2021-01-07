@@ -22,7 +22,7 @@ import com.maple.linkageview.databinding.MsItemChildHeaderBinding
  */
 open class CustomChildAdapter(
     private val mContext: Context
-) : BaseQuickLinkageAdapter<BaseLinkageItem>() {
+) : BaseQuickLinkageAdapter() {
 
     companion object {
         const val type_item = 0

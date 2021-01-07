@@ -13,7 +13,6 @@ import com.maple.linkagerecyclerview.databinding.FragmentQuickBinding
 import com.maple.linkagerecyclerview.utils.DensityUtils.dp2px
 import com.maple.linkageview.LinkageRecyclerView
 import com.maple.linkageview.adapter.BaseQuickLinkageAdapter
-import com.maple.linkageview.bean.BaseLinkageItem
 
 /**
  * 快速使用
@@ -43,10 +42,10 @@ class QuickFragment : Fragment() {
             setLayoutWidth(ViewGroup.LayoutParams.MATCH_PARENT)
             setLayoutHeight(dp2px(context, 400f))
             setGroupWidth(dp2px(context, 80f))
-            groupItemClickListener = BaseQuickLinkageAdapter.OnItemClickListener<BaseLinkageItem> { item, position ->
+            groupItemClickListener = BaseQuickLinkageAdapter.OnItemClickListener { item, position ->
                 Snackbar.make(view!!, item.itemName!!, Snackbar.LENGTH_SHORT).show()
             }
-            childItemClickListener = BaseQuickLinkageAdapter.OnItemClickListener<BaseLinkageItem> { item, position ->
+            childItemClickListener = BaseQuickLinkageAdapter.OnItemClickListener { item, position ->
                 Snackbar.make(view!!, item.itemName!!, Snackbar.LENGTH_SHORT).show()
             }
         }

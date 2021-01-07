@@ -4,6 +4,8 @@ import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.maple.linkageview.bean.BaseLinkageItem;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,30 +13,30 @@ import java.util.List;
  * @author : shaoshuai
  * @date ：2021/1/4
  */
-public abstract class BaseQuickLinkageAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<T> mDataList = new ArrayList<T>();
+public abstract class BaseQuickLinkageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private List<BaseLinkageItem> mDataList = new ArrayList<BaseLinkageItem>();
 
-    public void refreshData(List<T> newData) {
-        mDataList = newData != null ? newData : new ArrayList<T>();
+    public void refreshData(List<BaseLinkageItem> newData) {
+        mDataList = newData != null ? newData : new ArrayList<BaseLinkageItem>();
         this.notifyDataSetChanged();
     }
 
-    public List<T> getData() {
+    public List<BaseLinkageItem> getData() {
         return mDataList;
     }
 
-    public T getItem(int position) {
+    public BaseLinkageItem getItem(int position) {
         return mDataList.get(position);
     }
 
-    public void add(T t) {
+    public void add(BaseLinkageItem t) {
         if (t == null)
             return;
         mDataList.add(t);
         this.notifyDataSetChanged();
     }
 
-    public void add(List<T> data) {
+    public void add(List<BaseLinkageItem> data) {
         if (data != null && data.size() > 0) {
             mDataList.addAll(data);
             this.notifyDataSetChanged();
@@ -100,15 +102,15 @@ public abstract class BaseQuickLinkageAdapter<T> extends RecyclerView.Adapter<Re
     }
 
     // item click
-    private OnItemClickListener<T> itemClickListener = null;
+    private OnItemClickListener itemClickListener = null;
 
-    public void setOnItemClickListener(OnItemClickListener<T> listener) {
+    public void setOnItemClickListener(OnItemClickListener listener) {
         itemClickListener = listener;
     }
 
-    public interface OnItemClickListener<T> {
+    public interface OnItemClickListener {
         // void onItemClick(View v, int position);
-        void onItemClick(T item, int position);
+        void onItemClick(BaseLinkageItem item, int position);
     }
 
     // item long click

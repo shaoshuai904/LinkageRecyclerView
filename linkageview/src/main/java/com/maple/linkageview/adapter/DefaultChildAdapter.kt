@@ -19,7 +19,7 @@ import com.maple.linkageview.databinding.MsItemChildHeaderBinding
  */
 open class DefaultChildAdapter(
     private val mContext: Context
-) : BaseQuickLinkageAdapter<BaseLinkageItem>() {
+) : BaseQuickLinkageAdapter() {
 
     companion object {
         const val type_item = 0
@@ -62,7 +62,7 @@ open class DefaultChildAdapter(
         fun bind(item: BaseLinkageItem) {
             bindViewClickListener(this)
             binding.tvTitle.text = item.itemName
-            binding.tvDes.text = "详情说明"
+            binding.tvDes.text = item.content
         }
     }
 

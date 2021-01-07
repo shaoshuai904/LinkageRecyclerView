@@ -19,7 +19,7 @@ import com.maple.linkageview.databinding.MsItemGroupBinding
  */
 class DefaultGroupAdapter(
     private val mContext: Context
-) : BaseQuickLinkageAdapter<BaseLinkageItem>() {
+) : BaseQuickLinkageAdapter() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
         val binding: MsItemGroupBinding = DataBindingUtil.inflate(LayoutInflater.from(mContext), R.layout.ms_item_group, parent, false)

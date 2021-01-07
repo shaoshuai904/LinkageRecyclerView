@@ -12,7 +12,6 @@ import com.maple.linkagerecyclerview.data.TestDataUtils
 import com.maple.linkagerecyclerview.databinding.FragmentCustomBinding
 import com.maple.linkageview.adapter.BaseQuickLinkageAdapter
 import com.maple.linkageview.adapter.DefaultGroupAdapter
-import com.maple.linkageview.bean.BaseLinkageItem
 
 /**
  * 自定义样式
@@ -48,10 +47,10 @@ class CustomFragment : Fragment() {
         with(binding.linkage) {
             init(data, DefaultGroupAdapter(context), CustomChildAdapter(context))
             isScrollSmoothly = false
-            groupItemClickListener = BaseQuickLinkageAdapter.OnItemClickListener<BaseLinkageItem> { item, position ->
+            groupItemClickListener = BaseQuickLinkageAdapter.OnItemClickListener { item, position ->
                 Snackbar.make(view!!, item.itemName!!, Snackbar.LENGTH_SHORT).show()
             }
-            childItemClickListener = BaseQuickLinkageAdapter.OnItemClickListener<BaseLinkageItem> { item, position ->
+            childItemClickListener = BaseQuickLinkageAdapter.OnItemClickListener { item, position ->
                 Snackbar.make(view!!, item.itemName!!, Snackbar.LENGTH_SHORT).show()
             }
         }
