@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
@@ -23,10 +22,10 @@ import java.util.*
  * @author : shaoshuai
  * @date ：2021/1/4
  */
-class LinkageRecyclerView : RelativeLayout {
+class LinkageRecyclerView : FrameLayout {
     private lateinit var mRvGroup: RecyclerView
     private lateinit var mRvChild: RecyclerView
-    private lateinit var mHeaderContainer: FrameLayout
+    private lateinit var mFixedHeader: FrameLayout
 
     private lateinit var groupAdapter: BaseQuickLinkageAdapter
     private lateinit var childAdapter: BaseQuickLinkageAdapter
@@ -43,7 +42,7 @@ class LinkageRecyclerView : RelativeLayout {
         LayoutInflater.from(context).inflate(R.layout.ms_layout_linkage_view, this, true)
         mRvGroup = findViewById(R.id.rv_group)
         mRvChild = findViewById(R.id.rv_child)
-        mHeaderContainer = findViewById(R.id.header_container)
+        mFixedHeader = findViewById(R.id.fl_fixed_header)
     }
 
     fun init(linkageItems: List<BaseLinkageItem>?) {
@@ -114,7 +113,7 @@ class LinkageRecyclerView : RelativeLayout {
     private fun initLinkageChild() {
         if (mTvHeader == null) {
             val view = LayoutInflater.from(context).inflate(R.layout.ms_item_child_header, null)
-            mHeaderContainer.addView(view)
+            mFixedHeader.addView(view)
             mTvHeader = view.findViewById(R.id.tv_name)
             mTvHeader?.text = mInitItems.first().itemName
         }

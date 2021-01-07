@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
-        android:id="@+id/layout_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

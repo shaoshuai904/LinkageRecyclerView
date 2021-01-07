@@ -29,7 +29,7 @@
                 tools:listitem="@layout/ms_item_child" />
 
             <FrameLayout
-                android:id="@+id/header_container"
+                android:id="@+id/fl_fixed_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
