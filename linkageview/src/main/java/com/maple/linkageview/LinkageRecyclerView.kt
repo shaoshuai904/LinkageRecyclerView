@@ -1,7 +1,6 @@
 package com.maple.linkageview
 
 import android.content.Context
-import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
@@ -16,7 +15,6 @@ import com.maple.linkageview.adapter.BaseQuickLinkageAdapter
 import com.maple.linkageview.adapter.DefaultChildAdapter
 import com.maple.linkageview.adapter.DefaultGroupAdapter
 import com.maple.linkageview.bean.BaseLinkageItem
-import com.maple.linkageview.utils.RecyclerViewScrollHelper
 import java.util.*
 
 /**
@@ -33,14 +31,7 @@ class LinkageRecyclerView : RelativeLayout {
     private lateinit var groupAdapter: BaseQuickLinkageAdapter
     private lateinit var childAdapter: BaseQuickLinkageAdapter
     private val mGroupPositions: MutableList<Int> = ArrayList() // group 的索引值
-    private var mInitItems: List<BaseLinkageItem> = arrayListOf()
-    private var mLastGroupName: String? = null
-
-    private var mTvHeader: TextView? = null
-    private var mTitleHeight = 0
-
-    private var mFirstVisiblePosition = 0
-    private var mGroupClicked = false // 组item点击
+    private var mInitItems: List<BaseLinkageItem> = arrayListOf() // 数据集
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -82,7 +73,7 @@ class LinkageRecyclerView : RelativeLayout {
         initLinkageChild()
     }
 
-    var isScrollSmoothly: Boolean = true
+    var isScrollSmoothly: Boolean = true // 平滑滚动
     var groupItemClickListener: BaseQuickLinkageAdapter.OnItemClickListener? = null
     var childItemClickListener: BaseQuickLinkageAdapter.OnItemClickListener? = null
 
@@ -90,15 +81,21 @@ class LinkageRecyclerView : RelativeLayout {
         mRvGroup.layoutManager = LinearLayoutManager(context)
         mRvGroup.adapter = groupAdapter.apply {
             setOnItemClickListener { item: BaseLinkageItem?, position: Int ->
-                if (isScrollSmoothly) {
-                    // 点击主条目时，次条目平滑滚动
-                    RecyclerViewScrollHelper.smoothScrollToPosition(mRvChild, LinearSmoothScroller.SNAP_TO_START, mGroupPositions[position])
-                } else {
-                    val manager = mRvChild.layoutManager as LinearLayoutManager
-                    manager.scrollToPositionWithOffset(mGroupPositions[position], 0)
+                val layoutManager = mRvChild.layoutManager
+                if (layoutManager is LinearLayoutManager) {
+                    if (isScrollSmoothly) {
+                        // 点击主条目时，次条目平滑滚动
+                        val mScroller: LinearSmoothScroller = object : LinearSmoothScroller(context) {
+                            override fun getHorizontalSnapPreference(): Int = SNAP_TO_START
+                            override fun getVerticalSnapPreference(): Int = SNAP_TO_START
+                        }
+                        mScroller.targetPosition = mGroupPositions[position]
+                        layoutManager.startSmoothScroll(mScroller)
+                    } else {
+                        layoutManager.scrollToPositionWithOffset(mGroupPositions[position], 0)
+                    }
                 }
                 updateSelectItem(position)
-                mGroupClicked = true
                 groupItemClickListener?.onItemClick(item, position)
             }
         }
@@ -110,79 +107,57 @@ class LinkageRecyclerView : RelativeLayout {
         }
     }
 
+    private var mTvHeader: TextView? = null // 固定标题View
+    private var mFirstVisiblePosition = 0 // 第一个显示的item索引
+    private var mCurrentGroupName: String? = null // 当前选中的group的名称
+
     private fun initLinkageChild() {
         if (mTvHeader == null) {
             val view = LayoutInflater.from(context).inflate(R.layout.ms_item_child_header, null)
             mHeaderContainer.addView(view)
             mTvHeader = view.findViewById(R.id.tv_name)
-        }
-        val item = mInitItems[mFirstVisiblePosition]
-        if (item.isGroup) {
-            mTvHeader?.text = item.itemName
+            mTvHeader?.text = mInitItems.first().itemName
         }
         mRvChild.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                mTitleHeight = mTvHeader!!.measuredHeight
-            }
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val mChildLayoutManager = mRvChild.layoutManager as LinearLayoutManager
-                val firstPosition = mChildLayoutManager.findFirstVisibleItemPosition()
+                // 针对于每一个Group Item View ： 将固定header上推
                 val firstCompletePosition = mChildLayoutManager.findFirstCompletelyVisibleItemPosition()
-                val items = mInitItems
-
-                // 粘性逻辑
-                if (firstCompletePosition > 0 && firstCompletePosition < items.size && items[firstCompletePosition].isGroup) {
+                if (firstCompletePosition > 0 && firstCompletePosition < mInitItems.size && mInitItems[firstCompletePosition].isGroup) {
                     val view = mChildLayoutManager.findViewByPosition(firstCompletePosition)
-                    if (view != null && view.top <= mTitleHeight) {
-                        mTvHeader?.y = (view.top - mTitleHeight).toFloat()
+                    if (view != null && mTvHeader != null && view.top <= mTvHeader!!.height) {
+                        mTvHeader?.y = (view.top - mTvHeader!!.height).toFloat()
                     }
                 }
 
-                // 组标题更改和联动
-                var groupNameChanged = false
+                // 首个可见条目发生变化时：
+                val firstPosition = mChildLayoutManager.findFirstVisibleItemPosition()
                 if (mFirstVisiblePosition != firstPosition && firstPosition >= 0) {
                     mFirstVisiblePosition = firstPosition
                     mTvHeader?.y = 0f
-                    val item = items[mFirstVisiblePosition]
-                    if (item.isGroup) {
-                        mTvHeader?.text = item.itemName
-                    }
-                    val currentGroupName = items[mFirstVisiblePosition].getShowGroupName()
-                    if (TextUtils.isEmpty(mLastGroupName) || mLastGroupName != currentGroupName) {
-                        mLastGroupName = currentGroupName
-                        groupNameChanged = true
-                        mTvHeader?.text = mLastGroupName
-                    }
-                }
-
-                // the following logic can not be perfect, because tvHeader's title may not
-                // always equals to the title of selected primaryItem, while there
-                // are several groups which has little items to stick group item to tvHeader.
-                //
-                // To avoid to this extreme situation, my idea is to add a footer on the bottom,
-                // to help wholly execute this logic.
-                if (groupNameChanged) {
-                    val groupNames = groupAdapter.data
-                    for (i in groupNames.indices) {
-                        if (groupNames[i].itemName == mLastGroupName) {
-                            if (mGroupClicked) {
-                                if (groupAdapter.selectedPosition == i) {
-                                    mGroupClicked = false
+                    val currentGroupName = mInitItems[mFirstVisiblePosition].getShowGroupName()
+                    if (mCurrentGroupName != currentGroupName) {
+                        mCurrentGroupName = currentGroupName
+                        mTvHeader?.text = mCurrentGroupName
+                        // 组标题更改和联动 : change group adapter selected
+                        groupAdapter.data.forEachIndexed { index, item ->
+                            if (item.itemName == mCurrentGroupName) {
+                                groupAdapter.updateSelectItem(index)
+                                val layoutManager = mRvGroup.layoutManager
+                                if (layoutManager is LinearLayoutManager) {
+                                    val mScroller = LinearSmoothScroller(context).apply { targetPosition = index }
+                                    layoutManager.startSmoothScroll(mScroller)
                                 }
-                            } else {
-                                groupAdapter.updateSelectItem(i)
-                                RecyclerViewScrollHelper.smoothScrollToPosition(mRvGroup, LinearSmoothScroller.SNAP_TO_END, i)
                             }
                         }
                     }
                 }
+
             }
         })
     }
-
 
     // 设置固定宽度
     fun setLayoutWidth(newWidth: Int) {
