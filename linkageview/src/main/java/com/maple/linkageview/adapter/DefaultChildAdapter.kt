@@ -35,7 +35,7 @@ open class DefaultChildAdapter(
             bindViewClickListener(this)
             val selected = mSelectedPosition == position
             binding.tvName.text = item.itemName
-            binding.tvName.setTextColor(ContextCompat.getColor(mContext, if (selected) R.color.child_text_sel else R.color.child_text_def))
+            binding.tvName.setTextColor(ContextCompat.getColor(mContext, if (selected) R.color.ms_child_text_sel else R.color.ms_child_text_def))
             binding.ivMarker.visibility = if (selected) View.VISIBLE else View.GONE
         }
     }

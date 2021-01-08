@@ -12,7 +12,7 @@
             android:id="@+id/rv_group"
             android:layout_width="120dp"
             android:layout_height="match_parent"
-            android:background="@color/group_bg_def"
+            android:background="@color/ms_group_bg_def"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/ms_item_group" />
 

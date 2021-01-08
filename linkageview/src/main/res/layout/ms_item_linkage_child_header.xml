@@ -11,7 +11,7 @@
             android:id="@+id/tv_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/child_header_bg"
+            android:background="@color/ms_child_header_bg"
             android:padding="12dp"
             android:singleLine="true"
             tools:text="套餐A" />

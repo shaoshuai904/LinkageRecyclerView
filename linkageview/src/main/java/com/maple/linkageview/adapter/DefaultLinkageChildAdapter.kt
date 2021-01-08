@@ -65,7 +65,7 @@ open class DefaultLinkageChildAdapter(
             bindViewClickListener(this)
             val selected = mSelectedPosition == position
             binding.tvTitle.text = item.itemName
-            binding.tvTitle.setTextColor(ContextCompat.getColor(mContext, if (selected) R.color.group_text_sel else R.color.group_text_def))
+            binding.tvTitle.setTextColor(ContextCompat.getColor(mContext, if (selected) R.color.ms_group_text_sel else R.color.ms_group_text_def))
             binding.tvDes.text = item.content
             binding.tvDes.visibility = if (item.content.isNullOrEmpty()) View.GONE else View.VISIBLE
         }

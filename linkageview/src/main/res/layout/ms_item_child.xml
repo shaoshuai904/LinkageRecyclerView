@@ -6,6 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="10dp">
 
@@ -20,10 +21,10 @@
 
         <ImageView
             android:id="@+id/iv_marker"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
             android:layout_marginStart="10dp"
-            android:layout_marginEnd="5dp"
+            android:layout_marginEnd="1dp"
             android:src="@drawable/ms_svg_marker" />
 
     </LinearLayout>
