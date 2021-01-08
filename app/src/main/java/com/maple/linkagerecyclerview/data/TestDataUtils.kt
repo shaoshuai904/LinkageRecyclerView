@@ -75,6 +75,25 @@ object TestDataUtils {
         return data
     }
 
+
+    @JvmStatic
+    fun getTestData1(): List<BaseLinkageItem> {
+        val data = arrayListOf<BaseLinkageItem>()
+        data.add(BaseLinkageItem("2020"))
+        for (i in 1..10) {
+            data.add(BaseLinkageItem("2020 child item $i", "2020"))
+        }
+        data.add(BaseLinkageItem("2021"))
+        for (i in 1..10) {
+            data.add(BaseLinkageItem("2021 child item $i", "2021"))
+        }
+        data.add(BaseLinkageItem("2022"))
+        for (i in 1..10) {
+            data.add(BaseLinkageItem("2022 child item $i", "2022"))
+        }
+        return data
+    }
+
     @JvmStatic
     fun getTestData2(): List<CustomItemInfo> {
         val imgs = arrayOf(

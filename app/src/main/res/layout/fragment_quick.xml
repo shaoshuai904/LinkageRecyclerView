@@ -7,6 +7,13 @@
         android:background="#DDDDDD"
         android:orientation="vertical">
 
+        <com.maple.linkageview.MultiLevelRecyclerView
+            android:id="@+id/multi_level"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:background="#FFFFFF" />
+
         <com.maple.linkageview.LinkageRecyclerView
             android:id="@+id/linkage"
             android:layout_width="match_parent"

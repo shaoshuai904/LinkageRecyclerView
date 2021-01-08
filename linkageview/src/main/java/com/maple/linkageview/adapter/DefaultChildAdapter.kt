@@ -2,14 +2,14 @@ package com.maple.linkageview.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.maple.linkageview.R
 import com.maple.linkageview.bean.BaseLinkageItem
 import com.maple.linkageview.databinding.MsItemChildBinding
-import com.maple.linkageview.databinding.MsItemChildFooterBinding
-import com.maple.linkageview.databinding.MsItemChildHeaderBinding
 
 /**
  * 默认的二级列表适配器
@@ -21,64 +21,23 @@ open class DefaultChildAdapter(
     private val mContext: Context
 ) : BaseQuickLinkageAdapter() {
 
-    companion object {
-        const val type_item = 0
-        const val type_header = 1
-        const val type_footer = 2
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        val item: BaseLinkageItem = getItem(position)
-        return if (item.isGroup) {
-            type_header
-        } else if (item.itemName.isNullOrEmpty() && !item.parentName.isNullOrEmpty()) {
-            type_footer
-        } else {
-            type_item
-        }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            type_header -> HeaderHolder(DataBindingUtil.inflate(LayoutInflater.from(mContext), R.layout.ms_item_child_header, parent, false))
-            type_footer -> FooterHolder(DataBindingUtil.inflate(LayoutInflater.from(mContext), R.layout.ms_item_child_footer, parent, false))
-            // type_item -> ItemHolder(DataBindingUtil.inflate(LayoutInflater.from(mContext), R.layout.ms_item_child, parent, false))
-            else -> ItemHolder(DataBindingUtil.inflate(LayoutInflater.from(mContext), R.layout.ms_item_child, parent, false))
-        }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
+        val binding: MsItemChildBinding = DataBindingUtil.inflate(LayoutInflater.from(mContext), R.layout.ms_item_child, parent, false)
+        return ItemHolder(binding)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val type = getItemViewType(holder.adapterPosition)
-        val item = getItem(position)
-        when (type) {
-            type_item -> (holder as ItemHolder).bind(item)
-            type_header -> (holder as HeaderHolder).bind(item)
-            type_footer -> (holder as FooterHolder).bind(item)
-        }
+        (holder as ItemHolder).bind(position, getItem(position))
     }
 
-    // 基础条目
     inner class ItemHolder(val binding: MsItemChildBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: BaseLinkageItem) {
+        fun bind(position: Int, item: BaseLinkageItem) {
             bindViewClickListener(this)
-            binding.tvTitle.text = item.itemName
-            binding.tvDes.text = item.content
-        }
-    }
-
-    // 头
-    inner class HeaderHolder(val binding: MsItemChildHeaderBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: BaseLinkageItem) {
-            // bindViewClickListener(this)
-            binding.tvName.text = item.getShowGroupName()
-        }
-    }
-
-    // 尾
-    inner class FooterHolder(val binding: MsItemChildFooterBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: BaseLinkageItem) {
-            // bindViewClickListener(this)
+            val selected = mSelectedPosition == position
             binding.tvName.text = item.itemName
+            binding.tvName.setTextColor(ContextCompat.getColor(mContext, if (selected) R.color.child_text_sel else R.color.child_text_def))
+            binding.ivMarker.visibility = if (selected) View.VISIBLE else View.GONE
         }
     }
+
 }

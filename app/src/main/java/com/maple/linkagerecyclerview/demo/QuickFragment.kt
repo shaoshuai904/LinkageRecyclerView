@@ -12,6 +12,7 @@ import com.maple.linkagerecyclerview.data.TestDataUtils
 import com.maple.linkagerecyclerview.databinding.FragmentQuickBinding
 import com.maple.linkagerecyclerview.utils.DensityUtils.dp2px
 import com.maple.linkageview.LinkageRecyclerView
+import com.maple.linkageview.MultiLevelRecyclerView
 import com.maple.linkageview.adapter.BaseQuickLinkageAdapter
 
 /**
@@ -32,12 +33,30 @@ class QuickFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initLinkageData(binding.linkage)
+        initMultiLevelData(binding.multiLevel)
+    }
+
+
+    private fun initMultiLevelData(linkage: MultiLevelRecyclerView) {
+        val data = TestDataUtils.getTestData1()
+        with(linkage) {
+            initData(data)
+            setLayoutWidth(dp2px(context, 260f))
+            setLayoutHeight(dp2px(context, 200f))
+            setGroupWidth(dp2px(context, 70f))
+            groupItemClickListener = BaseQuickLinkageAdapter.OnItemClickListener { item, position ->
+                Snackbar.make(view!!, item.itemName!!, Snackbar.LENGTH_SHORT).show()
+            }
+            childItemClickListener = BaseQuickLinkageAdapter.OnItemClickListener { item, position ->
+                Snackbar.make(view!!, item.itemName!!, Snackbar.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun initLinkageData(linkage: LinkageRecyclerView) {
         val data = TestDataUtils.getTestData()
         with(linkage) {
-            init(data)
+            initData(data)
             // isScrollSmoothly = false
             setLayoutWidth(ViewGroup.LayoutParams.MATCH_PARENT)
             setLayoutHeight(dp2px(context, 400f))

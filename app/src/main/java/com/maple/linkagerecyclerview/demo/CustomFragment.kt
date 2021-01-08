@@ -45,7 +45,7 @@ class CustomFragment : Fragment() {
     private fun initLinkageData() {
         val data = TestDataUtils.getTestData2()
         with(binding.linkage) {
-            init(data, DefaultGroupAdapter(context), CustomChildAdapter(context))
+            initData(data, DefaultGroupAdapter(context), CustomChildAdapter(context))
             isScrollSmoothly = false
             groupItemClickListener = BaseQuickLinkageAdapter.OnItemClickListener { item, position ->
                 Snackbar.make(view!!, item.itemName!!, Snackbar.LENGTH_SHORT).show()

@@ -1,7 +1,6 @@
 package com.maple.linkageview.adapter
 
 import android.content.Context
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -35,14 +34,14 @@ class DefaultGroupAdapter(
         fun bind(position: Int, item: BaseLinkageItem) {
             bindViewClickListener(this)
             val selected = mSelectedPosition == position
-            binding.tvGroup.let {
-                it.text = item.itemName
-                it.setBackgroundColor(ContextCompat.getColor(mContext, if (selected) R.color.group_bg_sel else R.color.group_bg_def))
-                it.setTextColor(ContextCompat.getColor(mContext, if (selected) R.color.group_text_sel else R.color.group_text_def))
-                it.ellipsize = if (selected) TextUtils.TruncateAt.MARQUEE else TextUtils.TruncateAt.END
-                it.isFocusable = selected
-                it.isFocusableInTouchMode = selected
-                it.marqueeRepeatLimit = if (selected) -1 else 0
+            with(binding.tvGroup) {
+                text = item.itemName
+                setBackgroundColor(ContextCompat.getColor(mContext, if (selected) R.color.group_bg_sel else R.color.group_bg_def))
+                setTextColor(ContextCompat.getColor(mContext, if (selected) R.color.group_text_sel else R.color.group_text_def))
+                // ellipsize = if (selected) TextUtils.TruncateAt.MARQUEE else TextUtils.TruncateAt.END
+                //isFocusable = selected
+                //isFocusableInTouchMode = selected
+                //marqueeRepeatLimit = if (selected) -1 else 0
             }
         }
     }

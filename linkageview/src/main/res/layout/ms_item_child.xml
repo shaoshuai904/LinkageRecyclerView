@@ -6,28 +6,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:padding="10dp">
 
         <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="match_parent"
+            android:id="@+id/tv_name"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingLeft="12dp"
-            android:paddingTop="12dp"
-            android:paddingRight="12dp"
-            android:paddingBottom="4dp"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:layout_weight="1"
+            android:textColor="#333333"
+            android:textSize="16sp"
             tools:text="test_title" />
 
-        <TextView
-            android:id="@+id/tv_des"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
-            android:paddingBottom="12dp"
-            tools:text="test_title" />
+        <ImageView
+            android:id="@+id/iv_marker"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="5dp"
+            android:src="@drawable/ms_svg_marker" />
 
     </LinearLayout>
 

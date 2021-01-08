@@ -44,7 +44,7 @@ class SwitchFragment : Fragment() {
     private fun initLinkageData() {
         val data = TestDataUtils.getTestData()
         with(binding.linkage) {
-            init(data)
+            initData(data)
             groupItemClickListener = BaseQuickLinkageAdapter.OnItemClickListener { item, position ->
                 Snackbar.make(view!!, item.itemName!!, Snackbar.LENGTH_SHORT).show()
             }
