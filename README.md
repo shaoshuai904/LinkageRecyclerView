@@ -27,6 +27,25 @@ LinkageRecyclerView中内置多种常见样式的多级联动。可自定义Adap
 
 ![show_01](/screens/show_01.png)
 
+### 快速使用
+
+**Step 1.** Add it in your root build.gradle at the end of repositories:
+
+```groovy
+allprojects {
+	repositories {
+		maven { url 'https://jitpack.io' }
+	}
+}
+```
+
+**Step 2.** Add the dependency
+
+```groovy
+dependencies {
+	implementation 'com.github.shaoshuai904:LinkageRecyclerView:1.0.0'
+}
+```
 
 ###  MultiLevelRecyclerView
 
