@@ -14,15 +14,15 @@ LinkageRecyclerView中内置多种常见样式的多级联动。可自定义Adap
 
 基础自定义设置
 
- - initData(dataList) 自定义数据集（使用默认适配器）
- - initData(dataList,groupAdapter,childAdapter) 自定义数据集 和 group、child 适配器
- - groupItemClickListener 自定义Group条目点击监听
- - childItemClickListener 自定义Child条目点击监听
- - setLayoutWidth setLayoutHeight 自定义`窗体宽高`
- - setGroupWidth 自定义Group区域宽度
- - setChildWidth 自定义Child区域宽度
- - setChildSpanSize 自定义Child区域一行显示个数
- - isScrollSmoothly 自定义是否平滑滚动
+ - `initData(dataList)` 自定义数据集（使用默认适配器）
+ - `initData(dataList,groupAdapter,childAdapter)` 自定义数据集 和 group、child 适配器
+ - `groupItemClickListener` 自定义Group条目点击监听
+ - `childItemClickListener` 自定义Child条目点击监听
+ - `setLayoutWidth` `setLayoutHeight` 自定义窗体宽高
+ - `setGroupWidth` 自定义Group区域宽度
+ - `setChildWidth` 自定义Child区域宽度
+ - `setChildSpanSize` 自定义Child区域一行显示个数
+ - `isScrollSmoothly` 自定义是否平滑滚动
 
 
 ![show_01](/screens/show_01.png)
