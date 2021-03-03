@@ -1,4 +1,4 @@
-package com.maple.linkagerecyclerview.demo
+package com.maple.demo.demo
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.maple.linkagerecyclerview.R
-import com.maple.linkagerecyclerview.data.CustomItemInfo
-import com.maple.linkagerecyclerview.databinding.ItemChildCustomBinding
+import com.maple.demo.R
+import com.maple.demo.data.CustomItemInfo
+import com.maple.demo.databinding.ItemChildCustomBinding
 import com.maple.linkageview.adapter.BaseQuickLinkageAdapter
 import com.maple.linkageview.bean.BaseLinkageItem
 import com.maple.linkageview.databinding.MsItemLinkageChildFooterBinding

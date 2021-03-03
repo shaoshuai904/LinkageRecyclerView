@@ -1,4 +1,4 @@
-package com.maple.linkagerecyclerview
+package com.maple.demo
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -6,10 +6,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
-import com.maple.linkagerecyclerview.databinding.ActivityMainBinding
-import com.maple.linkagerecyclerview.demo.QuickFragment
-import com.maple.linkagerecyclerview.demo.CustomFragment
-import com.maple.linkagerecyclerview.demo.SwitchFragment
+import com.maple.demo.databinding.ActivityMainBinding
+import com.maple.demo.demo.QuickFragment
+import com.maple.demo.demo.CustomFragment
+import com.maple.demo.demo.SwitchFragment
 
 /**
  * 示例

@@ -1,4 +1,4 @@
-package com.maple.linkagerecyclerview.data
+package com.maple.demo.data
 
 import com.maple.linkageview.bean.BaseLinkageItem
 

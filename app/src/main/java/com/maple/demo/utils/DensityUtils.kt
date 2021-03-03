@@ -1,4 +1,4 @@
-package com.maple.linkagerecyclerview.utils
+package com.maple.demo.utils
 
 import android.content.Context
 import android.util.TypedValue

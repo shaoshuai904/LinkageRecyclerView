@@ -1,4 +1,4 @@
-package com.maple.linkagerecyclerview.demo
+package com.maple.demo.demo
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
-import com.maple.linkagerecyclerview.R
-import com.maple.linkagerecyclerview.data.TestDataUtils
-import com.maple.linkagerecyclerview.databinding.FragmentSwitchBinding
+import com.maple.demo.R
+import com.maple.demo.data.TestDataUtils
+import com.maple.demo.databinding.FragmentSwitchBinding
 import com.maple.linkageview.adapter.BaseQuickLinkageAdapter
 
 /**

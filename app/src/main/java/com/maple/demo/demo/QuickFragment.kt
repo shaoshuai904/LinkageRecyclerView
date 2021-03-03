@@ -1,4 +1,4 @@
-package com.maple.linkagerecyclerview.demo
+package com.maple.demo.demo
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
-import com.maple.linkagerecyclerview.R
-import com.maple.linkagerecyclerview.data.TestDataUtils
-import com.maple.linkagerecyclerview.databinding.FragmentQuickBinding
-import com.maple.linkagerecyclerview.utils.DensityUtils.dp2px
+import com.maple.demo.R
+import com.maple.demo.data.TestDataUtils
+import com.maple.demo.databinding.FragmentQuickBinding
+import com.maple.demo.utils.DensityUtils.dp2px
 import com.maple.linkageview.LinkageRecyclerView
 import com.maple.linkageview.MultiLevelRecyclerView
 import com.maple.linkageview.adapter.BaseQuickLinkageAdapter
@@ -41,9 +41,10 @@ class QuickFragment : Fragment() {
         val data = TestDataUtils.getTestData1()
         with(linkage) {
             initData(data)
-            setLayoutWidth(dp2px(context, 260f))
-            setLayoutHeight(dp2px(context, 200f))
-            setGroupWidth(dp2px(context, 70f))
+            setLayoutWidth(260f.dp2px(context))// 设置总布局宽度
+            setLayoutHeight(200f.dp2px(context))// 设置总布局高度
+            setGroupWidth(70f.dp2px(context))// 设置左侧父View宽度
+            // setChildWidth(70f.dp2px(context))// 设置右侧子View宽度
             groupItemClickListener = BaseQuickLinkageAdapter.OnItemClickListener { item, position ->
                 Snackbar.make(view!!, item.itemName!!, Snackbar.LENGTH_SHORT).show()
             }
@@ -57,10 +58,10 @@ class QuickFragment : Fragment() {
         val data = TestDataUtils.getTestData()
         with(linkage) {
             initData(data)
-            // isScrollSmoothly = false
+            isScrollSmoothly = true // 平滑滚动
             setLayoutWidth(ViewGroup.LayoutParams.MATCH_PARENT)
-            setLayoutHeight(dp2px(context, 400f))
-            setGroupWidth(dp2px(context, 80f))
+            setLayoutHeight(400f.dp2px(context))
+            setGroupWidth(80f.dp2px(context))
             groupItemClickListener = BaseQuickLinkageAdapter.OnItemClickListener { item, position ->
                 Snackbar.make(view!!, item.itemName!!, Snackbar.LENGTH_SHORT).show()
             }
